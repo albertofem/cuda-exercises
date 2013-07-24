@@ -36,3 +36,4 @@ obj/
 [Dd]ebug/
 [Rr]elease*/
 x64/
+*.pdb
