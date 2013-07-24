@@ -45,13 +45,13 @@ __global__ void cuAddVector(int *vectorA, int *vectorB, int *vectorC, int totalB
 
 int main(void)
 {
-    int *vectorA, *vectorB, *vectorC;
-    int *deviceVectorA, *deviceVectorB, *deviceVectorC;
+	int *vectorA, *vectorB, *vectorC;
+	int *deviceVectorA, *deviceVectorB, *deviceVectorC;
 
 	// get device info to avoid problems with block / threads configuration
 	cudaSetDevice(DEVICE);
-    cudaDeviceProp deviceProp;
-    cudaGetDeviceProperties(&deviceProp, DEVICE);
+	cudaDeviceProp deviceProp;
+	cudaGetDeviceProperties(&deviceProp, DEVICE);
 
 	int maxThreadsPerBlock = deviceProp.maxThreadsPerBlock;
 	int threadsPerBlock = THREADS_PER_BLOCK;
@@ -76,11 +76,11 @@ int main(void)
 	printf("Total blocks: %d\n", totalBlocks);
 	printf("Threads per block: %d\n", threadsPerBlock);
 
-    vectorA = (int*)malloc(memorySize);
-    vectorB = (int*)malloc(memorySize);
-    vectorC = (int*)malloc(memorySize);
+	vectorA = (int*)malloc(memorySize);
+	vectorB = (int*)malloc(memorySize);
+	vectorC = (int*)malloc(memorySize);
 
-    if(allocateCudaBytes(&deviceVectorA, memorySize, "deviceVectorA") != 0)
+	if(allocateCudaBytes(&deviceVectorA, memorySize, "deviceVectorA") != 0)
 		return -1;
 
 	if(allocateCudaBytes(&deviceVectorB, memorySize, "deviceVectorB") != 0)
@@ -89,10 +89,10 @@ int main(void)
 	if(allocateCudaBytes(&deviceVectorC, memorySize, "deviceVectorC") != 0)
 		return -1;
 
-    for (int i=0; i<VECTOR_SIZE; i++) {
-        vectorA[i] = i;
-        vectorB[i] = 2 * i;
-    }
+	for (int i=0; i<VECTOR_SIZE; i++) {
+		vectorA[i] = i;
+		vectorB[i] = 2 * i;
+	}
 
 	if(copyCudaBytes(deviceVectorA, vectorA, memorySize, "deviceVectorA", cudaMemcpyHostToDevice) != 0)
 		return -1;
@@ -107,39 +107,39 @@ int main(void)
 
 	cudaStatus = cudaDeviceSynchronize();
 
-    if (cudaStatus != 0) {
-        fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching kernel!\n", cudaStatus);
-        return -1;
-    }
+	if (cudaStatus != 0) {
+		fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching kernel!\n", cudaStatus);
+		return -1;
+	}
 
 	if(copyCudaBytes(vectorC, deviceVectorC, memorySize, "deviceVectorA", cudaMemcpyDeviceToHost) != 0)
 		return -1;
 
-    bool success = true;
+	bool success = true;
 
-    for (int i=0; i<VECTOR_SIZE; i++) {
-        if ((vectorA[i] + vectorB[i]) != vectorC[i]) {
-            printf("Error:  %d + %d != %d\n", vectorA[i], vectorB[i], vectorC[i]);
-            success = false;
-        }
-    }
+	for (int i=0; i<VECTOR_SIZE; i++) {
+		if ((vectorA[i] + vectorB[i]) != vectorC[i]) {
+			printf("Error:  %d + %d != %d\n", vectorA[i], vectorB[i], vectorC[i]);
+			success = false;
+		}
+	}
 
-    if (success) 
+	if (success) 
 		printf("Success adding numbers in CUDA!\n");
 
-    cudaFree(deviceVectorA);
-    cudaFree(deviceVectorB);
-    cudaFree(deviceVectorC);
+	cudaFree(deviceVectorA);
+	cudaFree(deviceVectorB);
+	cudaFree(deviceVectorC);
 
-    free(deviceVectorA);
-    free(deviceVectorB);
-    free(deviceVectorC);
+	free(deviceVectorA);
+	free(deviceVectorB);
+	free(deviceVectorC);
 
 #ifdef _DEBUG
 	cudaDeviceReset();
 #endif
 
-    return 0;
+	return 0;
 }
 
 // wrapper for cudaMalloc
