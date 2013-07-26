@@ -6,7 +6,6 @@
 *.vcxproj.*
 *.opensdf
 */*.vcxproj.*
-*/vendor/*
 */[Bb]in
 */[Dd]ebug*/
 */[Rr]elease*/
