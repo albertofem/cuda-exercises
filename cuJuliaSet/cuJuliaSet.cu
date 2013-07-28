@@ -22,6 +22,9 @@
 
 #define DIM 1000
 
+#define GRID_H 8
+#define GRID_W 8
+
 /* retorna "a - b" en segundos - RUTINA TIEMPOS WINDOWS */
 double performancecounter_diff(LARGE_INTEGER *a, LARGE_INTEGER *b)
 {
@@ -77,12 +80,12 @@ __host__ __device__ int julia(int x, int y)
 
 __global__ void juliaSetGPU(unsigned char *ptr)
 {
-	int x = blockIdx.x;
-	int y = blockIdx.y;
+	int x = blockIdx.x * GRID_H + threadIdx.x;
+	int y = blockIdx.y * GRID_W + threadIdx.y;
 	int offset = y * (blockDim.x*gridDim.x) + x;
 
 	// now calculate the value at that position
-	int juliaValue = julia( x, y );
+	int juliaValue = julia(x, y);
 	ptr[offset*4 + 0] = 255 * juliaValue;
 	ptr[offset*4 + 1] = 0;
 	ptr[offset*4 + 2] = 0;

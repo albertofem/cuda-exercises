@@ -157,7 +157,7 @@ int main(int argc, char **argv)
 	float *h_in = new float[ARRAY_SIZE];
 	float sum = 0.0f;
 
-	for(int i = 0; i < ARRAY_SIZE; i++)
+	for(int i=0; i<ARRAY_SIZE; i++)
 	{
 		// generate random float in [-1.0f, 1.0f]
 		h_in[i] = -1.0f + (float)rand()/((float)RAND_MAX/2.0f);

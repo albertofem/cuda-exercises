@@ -411,6 +411,7 @@ int main(int argc, char *argv[])
 				blocksPerGrid.x = blocksPerGrid.y = 
 				threadsPerBlock.x = threadsPerBlock.y = 
 					CUDA_GRID_W;
+
 				cuMedianFilter1DRow<<< blocksPerGrid, threadsPerBlock >>>(d_output, d_input);
 			break;
 
